@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import '../shared/app_drawer.dart';
 import 'package:myshop/models/product.dart';
 import 'package:myshop/ui/cart/cart_screen.dart';
 import 'package:myshop/ui/screens.dart';
 
-import 'products_grid.dart';
+import './products_grid.dart';
 
-enum FilterOptions { favorite, all }
+import '../shared/app_drawer.dart';
+import 'top_right_badge.dart';
+
+enum FilterOptions { favorites, all }
 
 class ProductsOverviewScreen extends StatefulWidget {
   const ProductsOverviewScreen({super.key});
@@ -17,6 +19,7 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showOnlyFavorites = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,14 +36,16 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   }
 
   Widget buildShoppingCartIcon() {
-    return IconButton(
-      icon: const Icon(
-        Icons.shopping_cart,
-       ),
-      onPressed: () {
-        Navigator.of(context).pushNamed(CartScreen.routeName);
-      },
-    
+    return TopRightBadge(
+      data: CartManager().productCount,
+      child: IconButton(
+        icon: const Icon(
+          Icons.shopping_cart,
+        ),
+        onPressed: () {
+          Navigator.of(context).pushNamed(CartScreen.routeName);
+        },
+      ),
     );
   }
 
@@ -48,7 +53,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
     return PopupMenuButton(
       onSelected: (FilterOptions selectedValue) {
         setState(() {
-          if (selectedValue == FilterOptions.favorite) {
+          if (selectedValue == FilterOptions.favorites) {
             _showOnlyFavorites = true;
           } else {
             _showOnlyFavorites = false;
@@ -60,8 +65,8 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       ),
       itemBuilder: (ctx) => [
         const PopupMenuItem(
-          value: FilterOptions.favorite,
-          child: Text('Only Favorite'),
+          value: FilterOptions.favorites,
+          child: Text('Only favorites'),
         ),
         const PopupMenuItem(
           value: FilterOptions.all,
