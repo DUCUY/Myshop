@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-// import 'package:myshop/ui/products/product_detail_screen.dart';
-// import 'package:myshop/ui/products/products_manager.dart';
-// import 'ui/products/products_overview_screen.dart';
-// import 'ui/products/user_products_screen.dart';
-// import 'ui/cart/cart_screen.dart';
+//import 'package:myshop/ui/products/product_detail_screen.dart';
+//import 'package:myshop/ui/products/products_manager.dart';
+//import 'ui/products/products_overview_screen.dart';
+//import 'ui/products/user_products_screen.dart';
+//import 'ui/cart/cart_screen.dart';
 import 'ui/screens.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,8 +16,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'My Shop',
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (ctx) => ProductsManager(), 
+        ),
+        //ChangeNotifierProvider(
+          //create: (context) => CartManager(),
+        //),
+        //ChangeNotifierProvider(
+          //create: (context) => OrdersManager(),
+        //)
+      ],
+      child: MaterialApp (
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Lato',
@@ -38,13 +50,16 @@ class MyApp extends StatelessWidget {
           return MaterialPageRoute(
             builder: (ctx) {
               return ProductDetailScreen(
-                ProductsManager().findById(productId),
+                ctx.read<ProductsManager>().findById(productId),
               );
             },
           );
         }
         return null;
-      },
+        },
+      ),
     );
+      
+    
   }
 }

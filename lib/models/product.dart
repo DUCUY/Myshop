@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
 class Product {
   final String? id;
@@ -15,28 +15,28 @@ class Product {
     required this.price,
     required this.imageUrl,
     isFavorite = false,
-  }) : _isFavorite = ValueNotifier(isFavorite);
+  }) :_isFavorite = ValueNotifier(isFavorite);
 
   set isFavorite(bool newValue) {
     _isFavorite.value = newValue;
   }
 
-  bool get isFavorite {
+  bool get isFavorite{
     return _isFavorite.value;
   }
 
-  ValueNotifier<bool> get isFavoriteListennable {
+  ValueNotifier<bool> get isFavoriteListenable{
     return _isFavorite;
   }
 
-  Product coppyWith({
+  Product copyWith({
     String? id,
     String? title,
     String? description,
     double? price,
     String? imageUrl,
     bool? isFavorite,
-  }){
+  }) {
     return Product(
       id: id ?? this.id,
       title: title ?? this.title,
