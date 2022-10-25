@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 //import 'package:myshop/ui/products/product_detail_screen.dart';
 //import 'package:myshop/ui/products/products_manager.dart';
@@ -6,8 +7,10 @@ import 'package:flutter/material.dart';
 //import 'ui/cart/cart_screen.dart';
 import 'ui/screens.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future<void> main() async {
+  await dotenv.load();
   runApp(const MyApp());
 }
 
@@ -18,6 +21,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        //(2)
+        ChangeNotifierProvider(
+          create: (context) => AuthManager(), 
+        ),
         ChangeNotifierProvider(
           create: (ctx) => ProductsManager(), 
         ),
@@ -28,7 +35,9 @@ class MyApp extends StatelessWidget {
           create: (context) => OrdersManager(),
         )
       ],
-      child: MaterialApp (
+      child: Consumer<AuthManager>(
+        builder: (ctx, authManager, child) {
+      return MaterialApp (
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Lato',
@@ -38,7 +47,16 @@ class MyApp extends StatelessWidget {
           secondary: Colors.deepOrange,
         ),
       ),
-      home: const ProductsOverviewScreen(),
+      home: authManager.isAuth 
+        ? const ProductsOverviewScreen()
+        : FutureBuilder (
+          future: authManager.tryAutoLogin(),
+          builder: (ctx, snapshot) {
+            return snapshot.connectionState == ConnectionState.waiting
+              ? const SplashScreen()
+              : const AuthScreen();
+          },
+        ),
       routes: {
         CartScreen.routeName: (ctx) => const CartScreen(),
         OrdersScreen.routeName: (ctx) => const OrdersScreen(),
@@ -69,9 +87,12 @@ class MyApp extends StatelessWidget {
         }
         return null;
         },
+      );
+        },
       ),
+  
+
     );
-      
-    
   }
 }
+
