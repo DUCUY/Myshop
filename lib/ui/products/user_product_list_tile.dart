@@ -35,18 +35,18 @@ class UserProductListTile extends StatelessWidget {
     return IconButton(
       icon: const Icon(Icons.delete),
       onPressed: () {
-context.read<ProductsManager>().deleteProduct(product.id!);
-ScaffoldMessenger.of(context)
-..hideCurrentSnackBar()
-..showSnackBar(
-const SnackBar(
-content: Text(
-'Product deleted',
-textAlign: TextAlign.center,
-),
-),
-);
-},
+        context.read<ProductsManager>().deleteProduct(product.id!);
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Product deleted',
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+      },
       color: Theme.of(context).errorColor,
     );
   }
@@ -55,9 +55,9 @@ textAlign: TextAlign.center,
     return IconButton(
       icon: const Icon(Icons.edit),
       onPressed: () {
-       Navigator.of(context).pushNamed(
-        EditProductScreen.routeName,
-        arguments: product.id,
+        Navigator.of(context).pushNamed(
+          EditProductScreen.routeName,
+          arguments: product.id,
         );
       },
       color: Theme.of(context).primaryColor,
