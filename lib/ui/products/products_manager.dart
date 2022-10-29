@@ -71,7 +71,7 @@ class ProductsManager with ChangeNotifier {
     final savedStatus = product.isFavorite;
     product.isFavorite = !savedStatus;
 
-    if (!await _productsService.saveFavoriteStatus(product)) {
+    if(!await _productsService.saveFavoriteStatus(product)) {
       product.isFavorite = savedStatus;
     }
   }
@@ -116,6 +116,9 @@ class ProductsManager with ChangeNotifier {
       notifyListeners();
     }
   }
+
+
+  
 }
 
 

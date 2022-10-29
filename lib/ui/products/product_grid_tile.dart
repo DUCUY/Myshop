@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:myshop/ui/screens.dart';
 import 'package:provider/provider.dart';
 import '../../models/product.dart';
 import '../cart/cart_manager.dart';
 import './product_detail_screen.dart';
+import './products_manager.dart';
 
 class ProductGridTile extends StatelessWidget {
   const ProductGridTile(
@@ -46,7 +48,8 @@ class ProductGridTile extends StatelessWidget {
             ),
             color: Theme.of(context).colorScheme.secondary,
             onPressed: () {
-             product.isFavorite = !isFavorite;
+              //product.isFavorite = !isFavorite;
+              ctx.read<ProductsManager>().toggleFavoriteStatus(product);
             },
           );
         },
@@ -60,25 +63,25 @@ class ProductGridTile extends StatelessWidget {
           Icons.shopping_cart,
         ),
         onPressed: () {
-final cart = context.read<CartManager>();
-cart.addItem(product);
-ScaffoldMessenger.of(context)
-..hideCurrentSnackBar()
-..showSnackBar(
-SnackBar(
-content: const Text(
-'Item added to cart',
-),
-duration: const Duration(seconds: 2),
-action: SnackBarAction(
-label: 'UNDO',
-onPressed: () {
-cart.removeSingleItem(product.id!);
-},
-),
-),
-);
-},
+          final cart = context.read<CartManager>();
+          cart.addItem(product);
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: const Text(
+                  'Item added to cart',
+                ),
+                duration: const Duration(seconds: 2),
+                action: SnackBarAction(
+                  label: 'UNDO',
+                  onPressed: () {
+                    cart.removeSingleItem(product.id!);
+                  },
+                ),
+              ),
+            );
+        },
         color: Theme.of(context).colorScheme.secondary,
       ),
     );
