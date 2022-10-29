@@ -75,5 +75,42 @@ class ProductsService extends FirebaseService {
     }
   }
 
-  saveFavoriteStatus(Product product) {}
+
+Future<bool> updateProduct(Product product) async {
+    try {
+      final url =
+          Uri.parse('$databaseUrl/products/${product.id}.json?auth=$token');
+      final response = await http.patch(
+        url,
+        body: json.encode(product.toJson()),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception(json.decode(response.body)['error']);
+      }
+
+      return true;
+    } catch (error) {
+      print(error);
+      return false;
+    }
+  }
+
+  Future<bool> deleteProduct(String id) async {
+    try {
+      final url = Uri.parse('$databaseUrl/products/$id.json?auth=$token');
+      final response = await http.delete(url);
+
+      if (response.statusCode != 200) {
+        throw Exception(json.decode(response.body)['error']);
+      }
+
+      return true;
+    } catch (error) {
+      print(error);
+      return false;
+    }
+  }
+
+saveFavoriteStatus(Product product) {}
 }

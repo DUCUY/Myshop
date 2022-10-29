@@ -89,21 +89,33 @@ class ProductsManager with ChangeNotifier {
     }
   }
 
-  void deleteProduct(String s) {}
+ // void deleteProduct(String s) {}
 
-  void updateProduct(Product editedProduct) {}
+ // void updateProduct(Product editedProduct) {}
 
   findById(String productId) {}
 
-  // Future<void> updateProduct(Product product) async {
-  //   final index = _items.indexWhere((item) => item.id == product.id);
-  //   if (index >= 0) {
-  //     if (await _productsService.updateProduct(product)) {
-  //       _items[index] = product;
-  //       notifyListeners();
-  //     }
-  //   }
-  // }
+  Future<void> updateProduct(Product product) async {
+    final index = _items.indexWhere((item) => item.id == product.id);
+    if (index >= 0) {
+      if (await _productsService.updateProduct(product)) {
+        _items[index] = product;
+        notifyListeners();
+      }
+    }
+  }
+
+    Future<void> deleteProduct(String id) async {
+    final index = _items.indexWhere((item) => item.id == id);
+    Product? existingProduct = _items[index];
+    _items.removeAt(index);
+    notifyListeners();
+
+    if (!await _productsService.deleteProduct(id)) {
+      _items.insert(index, existingProduct);
+      notifyListeners();
+    }
+  }
 }
 
 
